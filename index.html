@@ -1,65 +1,1475 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OZON Style Marketplace Prototype</title>
   <style>
+    /* =============================
+       Base / Reset
+    ============================== */
+    :root {
+      --primary: #005bff;
+      --primary-dark: #0044c2;
+      --accent: #ff9900;
+      --text: #1f2429;
+      --muted: #7a8794;
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --border: #e4e9f0;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --shadow: 0 8px 24px rgba(31, 36, 41, 0.08);
+      --radius: 16px;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-    .a1 {
+    a {
       text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+    }
+
+    /* =============================
+       Header
+    ============================== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--card);
+      box-shadow: 0 2px 14px rgba(31, 36, 41, 0.08);
+    }
+
+    .header__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .search {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+    }
+
+    .search input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+    }
+
+    .header__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      background: var(--primary);
       color: white;
-      margin-right: 20px;
-      font-family: sans-serif;
-      font-weight: bold;
+      font-weight: 600;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     }
 
- 
- 
-    .div1 {
-        height: 500px;
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(0, 91, 255, 0.2);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn--ghost:hover {
+      background: #f3f6ff;
+      color: var(--primary);
+    }
+
+    .pill {
+      background: var(--primary);
+      color: white;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+
+    /* =============================
+       Layout
+    ============================== */
+    main {
+      padding: 32px 0 80px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    /* =============================
+       Filters
+    ============================== */
+    .filters {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 96px;
+      height: fit-content;
+    }
+
+    .filters h3 {
+      font-size: 18px;
+    }
+
+    .filters label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+    }
+
+    /* =============================
+       Catalog
+    ============================== */
+    .catalog {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .catalog__meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .catalog__meta select {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(31, 36, 41, 0.12);
+    }
+
+    .card__image {
+      background: #eef2ff;
+      border-radius: 12px;
+      padding: 12px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card__title {
+      font-size: 14px;
+      font-weight: 600;
+      min-height: 38px;
+    }
+
+    .price {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price__current {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .price__old {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .rating {
+      font-size: 13px;
+      color: #f97316;
+    }
+
+    .card button {
+      margin-top: auto;
+    }
+
+    /* =============================
+       Modal
+    ============================== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(31, 36, 41, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal.is-open {
+      display: flex;
+    }
+
+    .modal__content {
+      background: var(--card);
+      width: min(920px, 96vw);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal__grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+    }
+
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .gallery__main {
+      border-radius: 16px;
+      background: #eef2ff;
+      padding: 16px;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery__thumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .gallery__thumbs img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .gallery__thumbs img.active {
+      border-color: var(--primary);
+    }
+
+    .modal__section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal__section h3 {
+      font-size: 20px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* =============================
+       Cart & Checkout
+    ============================== */
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .cart-item img {
+      width: 70px;
+      height: 70px;
+      border-radius: 12px;
+      background: #eef2ff;
+      padding: 6px;
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+      cursor: pointer;
+    }
+
+    .cart-summary {
+      display: grid;
+      gap: 12px;
+      border-radius: 16px;
+      background: #f8f9fc;
+      padding: 16px;
+    }
+
+    .promo {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .promo input {
+      flex: 1;
+    }
+
+    .form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .form input,
+    .form textarea {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+    }
+
+    .notice {
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .notice--success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .notice--error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* =============================
+       Account / Admin
+    ============================== */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: transparent;
+    }
+
+    .admin-products {
+      display: grid;
+      gap: 12px;
+    }
+
+    .admin-row {
+      display: grid;
+      grid-template-columns: 1fr 120px 120px 120px auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .admin-row input {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #f8f9fc;
+    }
+
+    /* =============================
+       Footer
+    ============================== */
+    footer {
+      padding: 24px 0 40px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* =============================
+       Responsive
+    ============================== */
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        position: static;
+      }
+
+      .modal__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header__bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search {
         width: 100%;
-        background-image: url(./photo_2025-08-05_20-52-05.jpg);
-        background-size: cover; /* Заполняет весь блок */
-        background-position: center; /* Центрирует */
-        background-repeat: no-repeat; /* Не повторяет */
-        margin-top: 50px;
-    
+      }
+
+      .catalog__meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
-
-    .d2{
-        display: flex;
-        justify-content: center;
-        gap: 140px;
-    }
-</style>
-
-    
-
-  
   </style>
 </head>
 <body>
-  <div class="container1">
-    <header>
-      <div class="div1">
-       
-        <div class="d2">
-          <a class="a1" href="">ГЛАВНАЯ</a>
-          <a class="a1" href="">КАТАЛОГ</a>
-          <a class="a1" href="">СОЦ.СЕТИ</a>
-          <a class="a1" href="">КОНТАКТЫ</a>
+  <header class="header">
+    <div class="container header__bar">
+      <div class="logo">OZON ✦</div>
+      <div class="search">
+        <input id="searchInput" type="text" placeholder="Искать товары, бренды и категории..." />
+      </div>
+      <div class="header__actions">
+        <button class="btn btn--ghost" id="accountBtn">Личный кабинет</button>
+        <button class="btn btn--ghost" id="adminBtn">Админка</button>
+        <button class="btn" id="cartBtn">Корзина <span class="pill" id="cartCount">0</span></button>
+      </div>
+    </div>
+  </header>
 
+  <main class="container">
+    <div class="layout">
+      <aside class="filters">
+        <h3>Фильтры</h3>
+        <div>
+          <label for="categoryFilter">Категория</label>
+          <select id="categoryFilter"></select>
+        </div>
+        <div>
+          <label for="minPrice">Цена от</label>
+          <input id="minPrice" type="number" placeholder="0" />
+        </div>
+        <div>
+          <label for="maxPrice">Цена до</label>
+          <input id="maxPrice" type="number" placeholder="99999" />
+        </div>
+        <button class="btn btn--ghost" id="resetFilters">Сбросить фильтры</button>
+      </aside>
+
+      <section class="catalog">
+        <div class="catalog__meta">
+          <div>
+            <h2>Каталог</h2>
+            <p id="resultsMeta" class="muted">Найдено: 0</p>
+          </div>
+          <div>
+            <label for="sortSelect">Сортировка</label>
+            <select id="sortSelect">
+              <option value="popular">По популярности</option>
+              <option value="price-asc">Цена ↑</option>
+              <option value="price-desc">Цена ↓</option>
+              <option value="rating-desc">Рейтинг</option>
+              <option value="name-asc">Название A-Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid" id="catalogGrid"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    Прототип маркетплейса в стиле Ozon · Только HTML/CSS/JS
+  </footer>
+
+  <!-- Product Modal -->
+  <div class="modal" id="productModal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2 id="productTitle">Товар</h2>
+        <button class="btn btn--ghost" data-close="productModal">Закрыть</button>
+      </div>
+      <div class="modal__grid">
+        <div class="gallery">
+          <div class="gallery__main">
+            <img id="productMainImage" alt="product" />
+          </div>
+          <div class="gallery__thumbs" id="productThumbs"></div>
+        </div>
+        <div class="modal__section">
+          <div>
+            <div class="rating" id="productRating">⭐⭐⭐⭐⭐</div>
+            <h3 id="productName">Название</h3>
+          </div>
+          <p id="productDescription">Описание</p>
+          <div class="chips" id="productSpecs"></div>
+          <div class="price">
+            <div class="price__current" id="productPrice">0 ₽</div>
+            <div class="price__old" id="productOldPrice">0 ₽</div>
+          </div>
+          <button class="btn" id="addToCartDetail">Добавить в корзину</button>
         </div>
       </div>
-    </header>
+    </div>
   </div>
+
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2>Корзина</h2>
+        <button class="btn btn--ghost" data-close="cartModal">Закрыть</button>
+      </div>
+      <div class="modal__grid">
+        <div>
+          <div class="cart-list" id="cartList"></div>
+        </div>
+        <div class="cart-summary">
+          <div>
+            <strong>Промокод</strong>
+            <div class="promo">
+              <input id="promoInput" type="text" placeholder="Введите промокод" />
+              <button class="btn btn--ghost" id="applyPromo">Применить</button>
+            </div>
+            <div id="promoMessage"></div>
+          </div>
+          <div>
+            <p>Сумма товаров: <strong id="subtotal">0 ₽</strong></p>
+            <p>Скидка: <strong id="discount">0 ₽</strong></p>
+            <p>Итого: <strong id="total">0 ₽</strong></p>
+          </div>
+          <div>
+            <h3>Оформление заказа</h3>
+            <form class="form" id="checkoutForm">
+              <input type="text" name="name" placeholder="Имя" required />
+              <input type="tel" name="phone" placeholder="Телефон" required />
+              <textarea name="address" rows="3" placeholder="Адрес доставки" required></textarea>
+              <button class="btn" type="submit">Оформить заказ</button>
+            </form>
+            <div id="orderMessage"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Modal -->
+  <div class="modal" id="accountModal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2>Личный кабинет</h2>
+        <button class="btn btn--ghost" data-close="accountModal">Закрыть</button>
+      </div>
+      <div class="tabs" id="accountTabs">
+        <div class="tab active" data-tab="orders">Мои заказы</div>
+        <div class="tab" data-tab="addresses">Адреса доставки</div>
+      </div>
+      <div id="accountContent"></div>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2>Админка</h2>
+        <button class="btn btn--ghost" data-close="adminModal">Закрыть</button>
+      </div>
+      <div id="adminContent"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =============================
+       Utils
+    ============================== */
+    const utils = {
+      formatPrice(value) {
+        return `${value.toLocaleString("ru-RU")} ₽`;
+      },
+      createImage(label, color) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop stop-color="${color}" offset="0" />
+              <stop stop-color="#ffffff" offset="1" />
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#g)" rx="24" />
+          <text x="50%" y="50%" font-size="24" text-anchor="middle" fill="#1f2429" font-family="Inter, sans-serif">${label}</text>
+        </svg>`;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      },
+      save(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      },
+      load(key, fallback) {
+        const stored = localStorage.getItem(key);
+        if (!stored) return fallback;
+        try {
+          return JSON.parse(stored);
+        } catch (error) {
+          return fallback;
+        }
+      }
+    };
+
+    /* =============================
+       Data
+    ============================== */
+    const data = {
+      categories: ["Электроника", "Дом", "Спорт", "Детям", "Красота", "Одежда"],
+      users: [
+        { id: 1, name: "Admin", role: "admin", login: "admin", password: "admin123" },
+        { id: 2, name: "Buyer", role: "user", login: "user", password: "user123" }
+      ],
+      promos: {
+        OZON10: 10,
+        SUPER20: 20,
+        FIRST5: 5
+      },
+      initialProducts: [
+        {
+          id: 1,
+          name: "Смарт-часы Nova",
+          category: "Электроника",
+          price: 5890,
+          oldPrice: 7490,
+          rating: 4.8,
+          stock: 24,
+          hidden: false,
+          description: "Стильные смарт-часы с датчиком кислорода, звонками и NFC.",
+          specs: ["NFC", "AMOLED", "5 дней работы"],
+          images: [
+            utils.createImage("Nova", "#c7d2fe"),
+            utils.createImage("Nova", "#a5b4fc"),
+            utils.createImage("Nova", "#e0e7ff")
+          ]
+        },
+        {
+          id: 2,
+          name: "Беспроводные наушники AirPulse",
+          category: "Электроника",
+          price: 3290,
+          oldPrice: 4590,
+          rating: 4.6,
+          stock: 40,
+          hidden: false,
+          description: "Глубокий бас, активное шумоподавление, зарядка USB-C.",
+          specs: ["ANC", "24 часа", "Bluetooth 5.3"],
+          images: [
+            utils.createImage("AirPulse", "#fde68a"),
+            utils.createImage("AirPulse", "#fcd34d"),
+            utils.createImage("AirPulse", "#fef3c7")
+          ]
+        },
+        {
+          id: 3,
+          name: "Умная лампа Glow",
+          category: "Дом",
+          price: 1790,
+          oldPrice: 2290,
+          rating: 4.4,
+          stock: 57,
+          hidden: false,
+          description: "Ночная лампа с управлением через приложение и голосовые ассистенты.",
+          specs: ["RGB", "Wi-Fi", "Таймер"],
+          images: [
+            utils.createImage("Glow", "#bbf7d0"),
+            utils.createImage("Glow", "#86efac"),
+            utils.createImage("Glow", "#dcfce7")
+          ]
+        },
+        {
+          id: 4,
+          name: "Фитнес-коврик Pro",
+          category: "Спорт",
+          price: 1290,
+          oldPrice: 1690,
+          rating: 4.7,
+          stock: 18,
+          hidden: false,
+          description: "Утолщенный коврик для йоги с антискользящим покрытием.",
+          specs: ["183 см", "1.2 кг", "Антискольжение"],
+          images: [
+            utils.createImage("Pro", "#fecaca"),
+            utils.createImage("Pro", "#fca5a5"),
+            utils.createImage("Pro", "#fee2e2")
+          ]
+        },
+        {
+          id: 5,
+          name: "Набор ухода SkinLab",
+          category: "Красота",
+          price: 2590,
+          oldPrice: 3190,
+          rating: 4.9,
+          stock: 12,
+          hidden: false,
+          description: "Трехэтапный уход: очищение, тоник, увлажнение.",
+          specs: ["Гипоаллергенно", "Витамин C", "30 дней"],
+          images: [
+            utils.createImage("SkinLab", "#fbcfe8"),
+            utils.createImage("SkinLab", "#f9a8d4"),
+            utils.createImage("SkinLab", "#fce7f3")
+          ]
+        },
+        {
+          id: 6,
+          name: "Детский конструктор Robo",
+          category: "Детям",
+          price: 2190,
+          oldPrice: 2890,
+          rating: 4.5,
+          stock: 30,
+          hidden: false,
+          description: "Конструктор с мотором, обучение STEM через игру.",
+          specs: ["8+", "120 деталей", "Мотор"],
+          images: [
+            utils.createImage("Robo", "#bae6fd"),
+            utils.createImage("Robo", "#7dd3fc"),
+            utils.createImage("Robo", "#e0f2fe")
+          ]
+        },
+        {
+          id: 7,
+          name: "Куртка Urban",
+          category: "Одежда",
+          price: 4990,
+          oldPrice: 6490,
+          rating: 4.3,
+          stock: 16,
+          hidden: false,
+          description: "Легкая ветровка с водоотталкивающей тканью.",
+          specs: ["M/L/XL", "Softshell", "Водоотталкивание"],
+          images: [
+            utils.createImage("Urban", "#ddd6fe"),
+            utils.createImage("Urban", "#c4b5fd"),
+            utils.createImage("Urban", "#ede9fe")
+          ]
+        },
+        {
+          id: 8,
+          name: "Кофемашина Barista",
+          category: "Дом",
+          price: 10990,
+          oldPrice: 12990,
+          rating: 4.8,
+          stock: 8,
+          hidden: false,
+          description: "Эспрессо, капучино, латте одним нажатием.",
+          specs: ["15 бар", "1.6 л", "Капучинатор"],
+          images: [
+            utils.createImage("Barista", "#fde68a"),
+            utils.createImage("Barista", "#fcd34d"),
+            utils.createImage("Barista", "#fef9c3")
+          ]
+        }
+      ]
+    };
+
+    /* =============================
+       State
+    ============================== */
+    const state = {
+      products: utils.load("ozon_products", data.initialProducts),
+      cart: utils.load("ozon_cart", []),
+      orders: utils.load("ozon_orders", []),
+      addresses: utils.load("ozon_addresses", []),
+      user: utils.load("ozon_user", null),
+      filters: {
+        search: "",
+        category: "all",
+        minPrice: "",
+        maxPrice: "",
+        sort: "popular"
+      },
+      promo: {
+        code: null,
+        discount: 0
+      },
+      activeProduct: null,
+      activeImage: null
+    };
+
+    /* =============================
+       Services
+    ============================== */
+    const cartService = {
+      add(productId) {
+        const item = state.cart.find(entry => entry.productId === productId);
+        if (item) {
+          item.qty += 1;
+        } else {
+          state.cart.push({ productId, qty: 1 });
+        }
+        cartService.persist();
+      },
+      updateQty(productId, qty) {
+        const item = state.cart.find(entry => entry.productId === productId);
+        if (!item) return;
+        item.qty = Math.max(1, qty);
+        cartService.persist();
+      },
+      remove(productId) {
+        state.cart = state.cart.filter(entry => entry.productId !== productId);
+        cartService.persist();
+      },
+      clear() {
+        state.cart = [];
+        cartService.persist();
+      },
+      persist() {
+        utils.save("ozon_cart", state.cart);
+        uiRender.updateCartCount();
+      },
+      getDetailedItems() {
+        return state.cart.map(entry => {
+          const product = state.products.find(item => item.id === entry.productId);
+          return { ...product, qty: entry.qty };
+        });
+      },
+      getSubtotal() {
+        return cartService.getDetailedItems().reduce((sum, item) => sum + item.price * item.qty, 0);
+      }
+    };
+
+    const filterService = {
+      apply(products) {
+        const { search, category, minPrice, maxPrice } = state.filters;
+        return products
+          .filter(item => !item.hidden)
+          .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+          .filter(item => (category === "all" ? true : item.category === category))
+          .filter(item => (minPrice ? item.price >= Number(minPrice) : true))
+          .filter(item => (maxPrice ? item.price <= Number(maxPrice) : true));
+      },
+      sort(products) {
+        const sorted = [...products];
+        switch (state.filters.sort) {
+          case "price-asc":
+            return sorted.sort((a, b) => a.price - b.price);
+          case "price-desc":
+            return sorted.sort((a, b) => b.price - a.price);
+          case "rating-desc":
+            return sorted.sort((a, b) => b.rating - a.rating);
+          case "name-asc":
+            return sorted.sort((a, b) => a.name.localeCompare(b.name));
+          default:
+            return sorted.sort((a, b) => b.stock - a.stock);
+        }
+      }
+    };
+
+    const promoService = {
+      apply(code) {
+        const trimmed = code.trim().toUpperCase();
+        if (!trimmed) {
+          state.promo = { code: null, discount: 0 };
+          return { status: "error", message: "Введите промокод." };
+        }
+        if (!data.promos[trimmed]) {
+          state.promo = { code: null, discount: 0 };
+          return { status: "error", message: "Промокод не найден." };
+        }
+        state.promo = { code: trimmed, discount: data.promos[trimmed] };
+        return { status: "success", message: `Скидка ${data.promos[trimmed]}% применена!` };
+      },
+      getDiscount(subtotal) {
+        return Math.round((subtotal * state.promo.discount) / 100);
+      }
+    };
+
+    const adminService = {
+      login(login, password) {
+        const user = data.users.find(entry => entry.login === login && entry.password === password);
+        if (!user) return null;
+        state.user = user;
+        utils.save("ozon_user", user);
+        return user;
+      },
+      logout() {
+        state.user = null;
+        utils.save("ozon_user", null);
+      },
+      saveProducts() {
+        utils.save("ozon_products", state.products);
+      },
+      addProduct(payload) {
+        const nextId = Math.max(...state.products.map(item => item.id)) + 1;
+        state.products.push({
+          id: nextId,
+          name: payload.name,
+          category: payload.category,
+          price: payload.price,
+          oldPrice: payload.oldPrice,
+          rating: payload.rating,
+          stock: payload.stock,
+          hidden: false,
+          description: payload.description,
+          specs: payload.specs,
+          images: payload.images
+        });
+        adminService.saveProducts();
+      },
+      updateProduct(id, updates) {
+        const product = state.products.find(item => item.id === id);
+        if (!product) return;
+        Object.assign(product, updates);
+        adminService.saveProducts();
+      }
+    };
+
+    /* =============================
+       UI Render
+    ============================== */
+    const uiRender = {
+      init() {
+        uiRender.renderFilters();
+        uiRender.renderCatalog();
+        uiRender.updateCartCount();
+      },
+      renderFilters() {
+        const categorySelect = document.getElementById("categoryFilter");
+        categorySelect.innerHTML = `<option value="all">Все категории</option>`;
+        data.categories.forEach(category => {
+          const option = document.createElement("option");
+          option.value = category;
+          option.textContent = category;
+          categorySelect.appendChild(option);
+        });
+      },
+      renderCatalog() {
+        const grid = document.getElementById("catalogGrid");
+        const filtered = filterService.sort(filterService.apply(state.products));
+        grid.innerHTML = "";
+        filtered.forEach(product => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="card__image"><img src="${product.images[0]}" alt="${product.name}" /></div>
+            <div class="card__title">${product.name}</div>
+            <div class="rating">⭐ ${product.rating.toFixed(1)}</div>
+            <div class="price">
+              <div class="price__current">${utils.formatPrice(product.price)}</div>
+              <div class="price__old">${utils.formatPrice(product.oldPrice)}</div>
+            </div>
+            <button class="btn" data-add="${product.id}">В корзину</button>
+          `;
+          card.addEventListener("click", event => {
+            const addBtn = event.target.closest("[data-add]");
+            if (addBtn) return;
+            uiRender.openProductModal(product.id);
+          });
+          card.querySelector("[data-add]").addEventListener("click", event => {
+            event.stopPropagation();
+            cartService.add(product.id);
+          });
+          grid.appendChild(card);
+        });
+        document.getElementById("resultsMeta").textContent = `Найдено: ${filtered.length}`;
+      },
+      updateCartCount() {
+        const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById("cartCount").textContent = count;
+      },
+      openProductModal(id) {
+        const product = state.products.find(item => item.id === id);
+        if (!product) return;
+        state.activeProduct = product;
+        state.activeImage = product.images[0];
+        document.getElementById("productTitle").textContent = product.name;
+        document.getElementById("productName").textContent = product.name;
+        document.getElementById("productRating").textContent = `⭐ ${product.rating.toFixed(1)}`;
+        document.getElementById("productDescription").textContent = product.description;
+        document.getElementById("productPrice").textContent = utils.formatPrice(product.price);
+        document.getElementById("productOldPrice").textContent = utils.formatPrice(product.oldPrice);
+        document.getElementById("productMainImage").src = state.activeImage;
+        const specs = document.getElementById("productSpecs");
+        specs.innerHTML = "";
+        product.specs.forEach(spec => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.textContent = spec;
+          specs.appendChild(chip);
+        });
+        const thumbs = document.getElementById("productThumbs");
+        thumbs.innerHTML = "";
+        product.images.forEach(image => {
+          const img = document.createElement("img");
+          img.src = image;
+          img.alt = product.name;
+          if (image === state.activeImage) img.classList.add("active");
+          img.addEventListener("click", () => {
+            state.activeImage = image;
+            document.getElementById("productMainImage").src = image;
+            thumbs.querySelectorAll("img").forEach(el => el.classList.remove("active"));
+            img.classList.add("active");
+          });
+          thumbs.appendChild(img);
+        });
+        uiRender.openModal("productModal");
+      },
+      renderCart() {
+        const list = document.getElementById("cartList");
+        const items = cartService.getDetailedItems();
+        list.innerHTML = "";
+        if (!items.length) {
+          list.innerHTML = "<p>Корзина пуста. Добавьте товары из каталога.</p>";
+        } else {
+          items.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "cart-item";
+            row.innerHTML = `
+              <img src="${item.images[0]}" alt="${item.name}" />
+              <div>
+                <strong>${item.name}</strong>
+                <p>${utils.formatPrice(item.price)}</p>
+                <div class="qty">
+                  <button data-qty="minus">-</button>
+                  <span>${item.qty}</span>
+                  <button data-qty="plus">+</button>
+                  <button class="btn btn--ghost" data-remove>Удалить</button>
+                </div>
+              </div>
+              <div><strong>${utils.formatPrice(item.price * item.qty)}</strong></div>
+            `;
+            row.querySelector("[data-qty='minus']").addEventListener("click", () => {
+              cartService.updateQty(item.id, item.qty - 1);
+              uiRender.renderCart();
+            });
+            row.querySelector("[data-qty='plus']").addEventListener("click", () => {
+              cartService.updateQty(item.id, item.qty + 1);
+              uiRender.renderCart();
+            });
+            row.querySelector("[data-remove]").addEventListener("click", () => {
+              cartService.remove(item.id);
+              uiRender.renderCart();
+            });
+            list.appendChild(row);
+          });
+        }
+        uiRender.renderCartSummary();
+      },
+      renderCartSummary() {
+        const subtotal = cartService.getSubtotal();
+        const discount = promoService.getDiscount(subtotal);
+        document.getElementById("subtotal").textContent = utils.formatPrice(subtotal);
+        document.getElementById("discount").textContent = utils.formatPrice(discount);
+        document.getElementById("total").textContent = utils.formatPrice(subtotal - discount);
+      },
+      renderAccount() {
+        const content = document.getElementById("accountContent");
+        const activeTab = document.querySelector(".tab.active").dataset.tab;
+        if (activeTab === "orders") {
+          if (!state.orders.length) {
+            content.innerHTML = "<p>Заказов пока нет.</p>";
+            return;
+          }
+          content.innerHTML = state.orders
+            .map(order => `
+              <div class="cart-item">
+                <div>
+                  <strong>Заказ №${order.id}</strong>
+                  <p>${order.date}</p>
+                  <p>${order.items.length} товаров · ${utils.formatPrice(order.total)}</p>
+                </div>
+                <div>${order.status}</div>
+              </div>
+            `)
+            .join("");
+        }
+        if (activeTab === "addresses") {
+          const form = `
+            <form class="form" id="addressForm">
+              <input type="text" name="label" placeholder="Название адреса" required />
+              <textarea name="address" rows="3" placeholder="Адрес" required></textarea>
+              <button class="btn" type="submit">Добавить адрес</button>
+            </form>
+          `;
+          const list = state.addresses
+            .map(address => `<div class="cart-item"><div><strong>${address.label}</strong><p>${address.address}</p></div></div>`)
+            .join("");
+          content.innerHTML = form + (list || "<p>Адресов пока нет.</p>");
+          const addressForm = document.getElementById("addressForm");
+          addressForm.addEventListener("submit", event => {
+            event.preventDefault();
+            const formData = new FormData(addressForm);
+            state.addresses.push({
+              label: formData.get("label"),
+              address: formData.get("address")
+            });
+            utils.save("ozon_addresses", state.addresses);
+            uiRender.renderAccount();
+          });
+        }
+      },
+      renderAdmin() {
+        const container = document.getElementById("adminContent");
+        if (!state.user || state.user.role !== "admin") {
+          container.innerHTML = `
+            <form class="form" id="adminLogin">
+              <h3>Вход для администратора</h3>
+              <input name="login" type="text" placeholder="Логин" required />
+              <input name="password" type="password" placeholder="Пароль" required />
+              <button class="btn" type="submit">Войти</button>
+            </form>
+          `;
+          container.querySelector("#adminLogin").addEventListener("submit", event => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const user = adminService.login(formData.get("login"), formData.get("password"));
+            if (!user || user.role !== "admin") {
+              alert("Неверные данные администратора");
+              return;
+            }
+            uiRender.renderAdmin();
+          });
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="modal__section">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+              <h3>Управление товарами</h3>
+              <button class="btn btn--ghost" id="logoutAdmin">Выйти</button>
+            </div>
+            <form class="form" id="addProductForm">
+              <input name="name" type="text" placeholder="Название товара" required />
+              <input name="category" type="text" placeholder="Категория" required />
+              <input name="price" type="number" placeholder="Цена" required />
+              <input name="oldPrice" type="number" placeholder="Старая цена" required />
+              <input name="rating" type="number" step="0.1" placeholder="Рейтинг" required />
+              <input name="stock" type="number" placeholder="Остаток" required />
+              <input name="specs" type="text" placeholder="Характеристики (через запятую)" required />
+              <textarea name="description" rows="2" placeholder="Описание" required></textarea>
+              <button class="btn" type="submit">Добавить товар</button>
+            </form>
+            <div class="admin-products" id="adminProducts"></div>
+          </div>
+        `;
+
+        document.getElementById("logoutAdmin").addEventListener("click", () => {
+          adminService.logout();
+          uiRender.renderAdmin();
+        });
+
+        document.getElementById("addProductForm").addEventListener("submit", event => {
+          event.preventDefault();
+          const formData = new FormData(event.target);
+          adminService.addProduct({
+            name: formData.get("name"),
+            category: formData.get("category"),
+            price: Number(formData.get("price")),
+            oldPrice: Number(formData.get("oldPrice")),
+            rating: Number(formData.get("rating")),
+            stock: Number(formData.get("stock")),
+            description: formData.get("description"),
+            specs: formData.get("specs").split(",").map(item => item.trim()),
+            images: [
+              utils.createImage(formData.get("name"), "#bfdbfe"),
+              utils.createImage(formData.get("name"), "#93c5fd"),
+              utils.createImage(formData.get("name"), "#dbeafe")
+            ]
+          });
+          event.target.reset();
+          uiRender.renderCatalog();
+          uiRender.renderAdmin();
+        });
+
+        const list = document.getElementById("adminProducts");
+        list.innerHTML = state.products
+          .map(product => `
+            <div class="admin-row" data-id="${product.id}">
+              <div>
+                <strong>${product.name}</strong>
+                <p>${product.category}</p>
+              </div>
+              <input type="number" value="${product.price}" data-field="price" />
+              <input type="number" value="${product.stock}" data-field="stock" />
+              <button class="btn btn--ghost" data-toggle>${product.hidden ? "Показать" : "Скрыть"}</button>
+              <button class="btn" data-save>Сохранить</button>
+            </div>
+          `)
+          .join("");
+
+        list.querySelectorAll(".admin-row").forEach(row => {
+          const id = Number(row.dataset.id);
+          row.querySelector("[data-save]").addEventListener("click", () => {
+            const price = Number(row.querySelector("[data-field='price']").value);
+            const stock = Number(row.querySelector("[data-field='stock']").value);
+            adminService.updateProduct(id, { price, stock });
+            uiRender.renderCatalog();
+          });
+          row.querySelector("[data-toggle]").addEventListener("click", () => {
+            const product = state.products.find(item => item.id === id);
+            adminService.updateProduct(id, { hidden: !product.hidden });
+            uiRender.renderCatalog();
+            uiRender.renderAdmin();
+          });
+        });
+      },
+      openModal(id) {
+        document.getElementById(id).classList.add("is-open");
+      },
+      closeModal(id) {
+        document.getElementById(id).classList.remove("is-open");
+      }
+    };
+
+    /* =============================
+       Event Listeners
+    ============================== */
+    document.getElementById("searchInput").addEventListener("input", event => {
+      state.filters.search = event.target.value;
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("categoryFilter").addEventListener("change", event => {
+      state.filters.category = event.target.value;
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("minPrice").addEventListener("input", event => {
+      state.filters.minPrice = event.target.value;
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("maxPrice").addEventListener("input", event => {
+      state.filters.maxPrice = event.target.value;
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("sortSelect").addEventListener("change", event => {
+      state.filters.sort = event.target.value;
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("resetFilters").addEventListener("click", () => {
+      state.filters = { search: "", category: "all", minPrice: "", maxPrice: "", sort: "popular" };
+      document.getElementById("searchInput").value = "";
+      document.getElementById("categoryFilter").value = "all";
+      document.getElementById("minPrice").value = "";
+      document.getElementById("maxPrice").value = "";
+      document.getElementById("sortSelect").value = "popular";
+      uiRender.renderCatalog();
+    });
+
+    document.getElementById("cartBtn").addEventListener("click", () => {
+      uiRender.renderCart();
+      uiRender.openModal("cartModal");
+    });
+
+    document.getElementById("accountBtn").addEventListener("click", () => {
+      uiRender.renderAccount();
+      uiRender.openModal("accountModal");
+    });
+
+    document.getElementById("adminBtn").addEventListener("click", () => {
+      uiRender.renderAdmin();
+      uiRender.openModal("adminModal");
+    });
+
+    document.getElementById("applyPromo").addEventListener("click", () => {
+      const result = promoService.apply(document.getElementById("promoInput").value);
+      const message = document.getElementById("promoMessage");
+      message.className = `notice ${result.status === "success" ? "notice--success" : "notice--error"}`;
+      message.textContent = result.message;
+      uiRender.renderCartSummary();
+    });
+
+    document.getElementById("checkoutForm").addEventListener("submit", event => {
+      event.preventDefault();
+      if (!state.cart.length) {
+        alert("Добавьте товары в корзину перед оформлением заказа.");
+        return;
+      }
+      const formData = new FormData(event.target);
+      const subtotal = cartService.getSubtotal();
+      const discount = promoService.getDiscount(subtotal);
+      const total = subtotal - discount;
+      const order = {
+        id: state.orders.length + 1,
+        date: new Date().toLocaleString("ru-RU"),
+        items: cartService.getDetailedItems(),
+        total,
+        customer: {
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          address: formData.get("address")
+        },
+        status: "В обработке"
+      };
+      state.orders.unshift(order);
+      utils.save("ozon_orders", state.orders);
+      cartService.clear();
+      document.getElementById("promoInput").value = "";
+      state.promo = { code: null, discount: 0 };
+      uiRender.renderCart();
+      const message = document.getElementById("orderMessage");
+      message.className = "notice notice--success";
+      message.textContent = "Заказ успешно оформлен! Мы свяжемся с вами.";
+      event.target.reset();
+    });
+
+    document.getElementById("addToCartDetail").addEventListener("click", () => {
+      if (state.activeProduct) {
+        cartService.add(state.activeProduct.id);
+      }
+    });
+
+    document.querySelectorAll("[data-close]").forEach(btn => {
+      btn.addEventListener("click", () => uiRender.closeModal(btn.dataset.close));
+    });
+
+    document.getElementById("accountTabs").addEventListener("click", event => {
+      const tab = event.target.closest(".tab");
+      if (!tab) return;
+      document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
+      tab.classList.add("active");
+      uiRender.renderAccount();
+    });
+
+    /* =============================
+       Init
+    ============================== */
+    uiRender.init();
+  </script>
 </body>
 </html>
